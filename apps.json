@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Finance Trading OS",
+    "tagline": "AI-powered finance and trading dashboard",
+    "description": "An owner-built finance and trading workspace. Public web access and distribution details will be published after they are confirmed.",
+    "category": "Finance",
+    "replaces": "Paid trading and portfolio tools",
+    "license": "needs confirmation",
+    "web_url": "needs confirmation",
+    "github_url": "https://github.com/siinghniibandhan-wq/ai-finance-trading-os",
+    "install": "docker compose up -d",
+    "download_url": "needs confirmation",
+    "icon": "📈",
+    "ios": false,
+    "android": false
+  }
+]
