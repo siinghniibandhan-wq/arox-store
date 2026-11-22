@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131d">
+  <meta name="description" content="Arox Store — open-source software and useful apps, ready to explore and run.">
+  <title>Arox Store — Software worth keeping</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Arox Store home"><span class="brand-mark">A</span><span>arox<span class="brand-light">store</span></span></a>
+    <nav aria-label="Main navigation"><a href="#catalogue">Explore</a><a href="#about">About</a></nav>
+    <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle colour theme">☼</button>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="pulse"></span> THE INDEPENDENT SOFTWARE SHELF</div>
+      <h1>Good software.<br><span>Less friction.</span></h1>
+      <p class="hero-copy">Discover capable alternatives to expensive software — then run them your way. Open source, self-hosted, and built to be useful.</p>
+      <a class="hero-link" href="#catalogue">Explore the collection <span>↘</span></a>
+      <div class="hero-orbit orbit-one"></div><div class="hero-orbit orbit-two"></div>
+    </section>
+    <section class="catalogue section-wrap" id="catalogue">
+      <div class="section-heading"><div><div class="eyebrow">THE COLLECTION</div><h2>Find your next tool.</h2></div><span class="count" id="app-count">Loading apps…</span></div>
+      <label class="search-wrap"><span>⌕</span><input id="search" type="search" placeholder="Search apps, categories, alternatives…" autocomplete="off"></label>
+      <div class="filters" id="filters" aria-label="Filter by category"></div>
+      <div class="app-grid" id="app-grid" aria-live="polite"></div>
+      <p class="empty-state" id="empty-state" hidden>No apps match that search. Try another term.</p>
+    </section>
+    <section class="about section-wrap" id="about"><div class="eyebrow">WHY AROX STORE</div><h2>Not just a list.<br><span>A way to get started.</span></h2><p>Every listing is curated by the store owner. Find the project, understand what it replaces, and choose how to use it — hosted, self-hosted, or downloaded from its source repository.</p><div class="about-points"><div><b>01</b><span>Owner-curated catalogue</span></div><div><b>02</b><span>Clear install guidance</span></div><div><b>03</b><span>Source-first downloads</span></div></div></section>
+  </main>
+  <footer><a class="brand" href="#"><span class="brand-mark">A</span><span>arox<span class="brand-light">store</span></span></a><span>Useful software, without the noise.</span><span>© <span id="year"></span> Arox Store</span></footer>
+  <dialog id="app-dialog" class="app-dialog"><button class="dialog-close" id="dialog-close" aria-label="Close">×</button><div id="app-detail"></div></dialog>
+</body>
+</html>
