@@ -30,14 +30,14 @@ The Compose stack keeps PostgreSQL and Redis on a private Docker network, expose
 
 ## Vercel serverless deployment
 
-This backend includes a Vercel Python Function entry point at `api/index.py` and routing configuration in `vercel.json`. The existing Docker Compose deployment remains supported and unchanged.
+This backend exposes the FastAPI application from `index.py` at the backend project root. With Vercel's FastAPI framework preset and the project root set to `backend/`, Vercel can load this application natively. The existing Docker Compose deployment remains supported and unchanged.
 
 ### Import settings
 
 1. Import this repository into Vercel.
 2. Set **Root Directory** to `backend` (not the repository root).
 3. Select the `feature/customer-auth-automated-reviews` branch to preview this unmerged backend work. Do not merge PR #3 as part of deployment setup.
-4. Keep the project name `arox-store` if available.
+4. Select the **FastAPI** framework preset and keep the project name `arox-store` if available.
 5. Add the production environment variables below before the first deployment.
 
 ### Required Vercel environment variables
