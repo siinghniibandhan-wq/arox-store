@@ -1,17 +1,72 @@
 [
   {
     "name": "Finance Trading OS",
-    "tagline": "AI-powered finance and trading dashboard",
-    "description": "An owner-built finance and trading workspace. Public web access and distribution details will be published after they are confirmed.",
-    "category": "Finance",
-    "replaces": "Paid trading and portfolio tools",
-    "license": "needs confirmation",
-    "web_url": "needs confirmation",
+    "tagline": "A unified workspace for market intelligence and trading workflows",
+    "description": "An independent finance and trading operating system project. Explore its capabilities and inspect the original repository before deploying; production access and distribution details are not yet published.",
+    "category": "Finance & Trading",
+    "replaces": "fragmented market research workflows",
     "github_url": "https://github.com/siinghniibandhan-wq/ai-finance-trading-os",
-    "install": "docker compose up -d",
-    "download_url": "needs confirmation",
+    "license": "Not yet verified",
     "icon": "📈",
-    "ios": false,
-    "android": false
+    "accent": "#69d5e5",
+    "tags": [
+      "markets",
+      "trading",
+      "finance",
+      "analytics"
+    ],
+    "features": [
+      "Market intelligence workspace",
+      "Trading workflow exploration",
+      "AI-assisted research",
+      "Original project source on GitHub"
+    ],
+    "install_note": "Installation instructions are not yet verified. Use the upstream README and deployment documentation."
+  },
+  {
+    "name": "Odoo",
+    "tagline": "A modular suite for business operations and enterprise workflows",
+    "description": "Odoo is an open-source suite of business applications covering areas such as CRM, sales, inventory, accounting and more. This listing links to the official upstream source; review its edition and licensing terms before use.",
+    "category": "Business & ERP",
+    "github_url": "https://github.com/odoo/odoo",
+    "license": "Check upstream licensing",
+    "icon": "🧩",
+    "accent": "#9b8cff",
+    "tags": [
+      "ERP",
+      "CRM",
+      "inventory",
+      "accounting",
+      "business"
+    ],
+    "features": [
+      "CRM and sales workflows",
+      "Inventory and operations",
+      "Accounting and invoicing",
+      "Extensible application modules"
+    ],
+    "install_note": "Follow the official Odoo installation documentation for the selected version and edition."
+  },
+  {
+    "name": "Arox AI",
+    "tagline": "An independent AI project from the Arox ecosystem",
+    "description": "Arox AI is listed as a separate project so it can be discovered independently from the marketplace. Review its repository for the current feature set, setup requirements and supported integrations.",
+    "category": "Artificial Intelligence",
+    "github_url": "https://github.com/siinghniibandhan-wq/Arox-Ai",
+    "license": "Not yet verified",
+    "icon": "✳",
+    "accent": "#b8a2ff",
+    "tags": [
+      "AI",
+      "automation",
+      "agents",
+      "integrations"
+    ],
+    "features": [
+      "Independent application listing",
+      "Original repository access",
+      "Project-specific setup and integrations"
+    ],
+    "install_note": "Installation instructions are not yet verified. Use the upstream README and project documentation."
   }
 ]
