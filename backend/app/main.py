@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta, timezone
 import re
-from fastapi import Depends, FastAPI, HTTPException, Query
+from contextlib import asynccontextmanager
+from fastapi import Depends, FastAPI, HTTPException, Query, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
@@ -11,12 +13,39 @@ from app.dependencies import admin_user, current_user
 from app.email import send_verification_email
 from app.models import Review, ReviewReport, User
 from app.moderation import ai_moderation_result, moderate_review
+from app.rate_limit import RateLimiter
 from app.schemas import LoginRequest, RegisterRequest, ReviewCreate, ReviewList, TokenResponse
 from app.security import create_access_token, hash_password, hash_token, new_verification_token, verify_password
+if settings.environment == "production":
+    required = {
+        "DATABASE_URL": settings.database_url if settings.database_url.startswith("postgresql") else "",
+        "REDIS_URL": settings.redis_url,
+        "JWT_SECRET_KEY": settings.jwt_secret_key,
+        "SMTP_HOST": settings.smtp_host,
+        "SMTP_USERNAME": settings.smtp_username,
+        "SMTP_PASSWORD": settings.smtp_password,
+        "SMTP_FROM_EMAIL": settings.smtp_from_email,
+        "OPENAI_API_KEY": settings.openai_api_key,
+    }
+    missing = [key for key, value in required.items() if not value]
+    if missing:
+        raise RuntimeError("Missing production configuration: " + ", ".join(missing))
+
 Base.metadata.create_all(bind=engine)
-app = FastAPI(title="Arox Store API", version="0.1.0")
+limiter = RateLimiter()
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    yield
+    await limiter.close()
+app = FastAPI(title="Arox Store API", version="0.2.0", lifespan=lifespan)
 app.add_middleware(CORSMiddleware, allow_origins=[settings.frontend_origin], allow_credentials=True,
                    allow_methods=["GET", "POST", "PATCH"], allow_headers=["Authorization", "Content-Type"])
+@app.middleware("http")
+async def enforce_rate_limits(request: Request, call_next):
+    if not await limiter.allow(request):
+        return JSONResponse(status_code=429, content={"detail": "Too many requests. Please try again later."},
+                            headers={"Retry-After": "60"})
+    return await call_next(request)
 def valid_app_id(app_id: str) -> bool: return bool(re.fullmatch(r"[a-z0-9][a-z0-9-]{1,99}", app_id))
 @app.get("/health")
 def health(): return {"status": "ok", "service": "arox-store-api"}
