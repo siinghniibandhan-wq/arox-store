@@ -1,7 +1,9 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    environment: str = "development"
     database_url: str = "sqlite:///./arox_store.db"
+    redis_url: str = ""
     jwt_secret_key: str = ""
     jwt_expire_minutes: int = 30
     frontend_origin: str = "https://siinghniibandhan-wq.github.io"
