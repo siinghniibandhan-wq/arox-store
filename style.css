@@ -79,3 +79,17 @@ footer a{text-decoration:none}footer a:hover{color:var(--text)}
 .install-steps code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;margin-top:.35rem;padding:.75rem;border-radius:12px;background:rgba(0,0,0,.24);color:var(--text);font-size:.85rem}
 .review-placeholder{padding:1rem;border:1px dashed var(--line);border-radius:14px;color:var(--muted);margin-top:.75rem}
 @media(max-width:640px){.search{max-width:none}.search-hint{font-size:.8rem!important}}
+
+.auth-nav{padding:.5rem 1rem}
+.auth-form,.review-form{display:grid;gap:.65rem;margin-top:1rem}
+.auth-form label,.review-form label{font-weight:600;font-size:.92rem}
+.auth-form input,.review-form input,.review-form select,.review-form textarea{width:100%;padding:.8rem .9rem;border:1px solid var(--line);border-radius:12px;background:var(--glass-hi);color:var(--text);font:inherit}
+.review-form textarea{resize:vertical}
+.auth-form .btn,.review-form .btn{justify-self:start}
+.text-button{justify-self:start;padding:.3rem 0;border:0;background:transparent;color:var(--accent);font:600 .92rem Figtree,sans-serif;cursor:pointer}
+.form-status{margin:.6rem 0;color:var(--muted);font-size:.92rem}
+.form-status.error{color:#fca5a5}
+.review-list{display:grid;gap:.75rem;margin-top:.9rem}
+.review-item{padding:.8rem 0;border-top:1px solid var(--line)}
+.review-item p{margin-top:.35rem;white-space:pre-wrap;overflow-wrap:anywhere}
+button:disabled{opacity:.6;cursor:wait}
