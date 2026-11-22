@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     jwt_secret_key: str = ""
     jwt_expire_minutes: int = 30
     frontend_origin: str = "https://siinghniibandhan-wq.github.io"
+    frontend_url: str = "https://siinghniibandhan-wq.github.io/arox-store/"
     smtp_host: str = ""
     smtp_port: int = 587
     smtp_username: str = ""
