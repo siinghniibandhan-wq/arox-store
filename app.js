@@ -1,63 +1,81 @@
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
-  const grid=$("app-grid"),filters=$("filters"),search=$("search"),dialog=$("app-dialog"),detail=$("app-detail");
-  let apps=[],category="All",query="";
-  const available=v=>typeof v==="string"&&v.trim()&&!/^needs confirmation$/i.test(v.trim());
-  const node=(tag,cls,text)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=text;return el;};
-  const safeUrl=value=>{if(!available(value))return null;try{const u=new URL(value);return ["https:","http:"].includes(u.protocol)?u.href:null;}catch{return null;}};
-  function renderFilters(){
-    filters.replaceChildren();
-    const cats=["All",...new Set(apps.map(a=>a.category).filter(Boolean))];
-    cats.forEach(name=>{const b=node("button","filter"+(category===name?" active":""),name);b.type="button";b.setAttribute("aria-pressed",String(category===name));b.addEventListener("click",()=>{category=name;renderFilters();renderApps();});filters.append(b);});
-  }
-  function matches(a){const hay=[a.name,a.tagline,a.description,a.category,a.replaces,...(a.tags||[])].join(" ").toLowerCase();return(category==="All"||a.category===category)&&hay.includes(query);}
-  function renderApps(){
-    grid.replaceChildren();const shown=apps.filter(matches);
-    $("app-count").textContent=shown.length+" "+(shown.length===1?"APPLICATION":"APPLICATIONS");
-    $("collection-label").textContent=category==="All"?"All applications":category;
-    $("empty-state").hidden=shown.length!==0;
-    shown.forEach(app=>{
-      const card=node("article","app-card");card.tabIndex=0;card.setAttribute("role","button");card.setAttribute("aria-label","View "+app.name);
-      if(app.accent)card.style.setProperty("--card-glow",app.accent);
-      const top=node("div","app-top"),icon=node("div","app-icon",app.icon||"◈"),cat=node("span","app-category",app.category||"Software");
-      top.append(icon,cat);const name=node("h3","",app.name),tagline=node("p","",app.tagline||"");
-      const bottom=node("div","card-bottom");bottom.append(node("span","",app.replaces?"AN ALTERNATIVE TO "+app.replaces.toUpperCase():"CURATED SOFTWARE"),node("b","","↗"));
-      card.append(top,name,tagline,bottom);card.addEventListener("click",()=>openApp(app));card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openApp(app);}});grid.append(card);
+  const grid = $("grid"), chips = $("chips"), search = $("search"), dlg = $("dlg"), detail = $("detail");
+  let apps = [], cat = "All", q = "";
+  const ok = v => typeof v === "string" && v.trim() && !/^needs confirmation$/i.test(v.trim());
+  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text !== undefined) n.textContent = text; return n; };
+  const url = v => { if (!ok(v)) return null; try { const u = new URL(v); return ["https:", "http:"].includes(u.protocol) ? u.href : null; } catch { return null; } };
+
+  function renderChips() {
+    chips.replaceChildren();
+    ["All", ...new Set(apps.map(a => a.category).filter(Boolean))].forEach(name => {
+      const b = el("button", "chip", name); b.type = "button"; b.setAttribute("aria-pressed", String(cat === name));
+      b.onclick = () => { cat = name; renderChips(); renderApps(); };
+      chips.append(b);
     });
   }
-  function addLink(parent,label,url,primary=false){
-    const href=safeUrl(url);if(!href)return;
-    const a=node("a","action"+(primary?"":" secondary"),label);a.href=href;a.target="_blank";a.rel="noopener noreferrer";parent.append(a);
+  const matches = a => (cat === "All" || a.category === cat) &&
+    [a.name, a.tagline, a.description, a.category, a.replaces, ...(a.tags || [])].join(" ").toLowerCase().includes(q);
+
+  function renderApps() {
+    grid.replaceChildren();
+    const list = apps.filter(matches);
+    $("count").textContent = list.length + (list.length === 1 ? " app" : " apps");
+    $("empty").hidden = list.length !== 0;
+    list.forEach(a => {
+      const c = el("button", "card glass"); c.type = "button";
+      if (ok(a.accent)) c.style.setProperty("--tint", a.accent);
+      const top = el("span", "top"), info = el("span", "");
+      info.append(el("h3", "", a.name), el("span", "cat", a.category || "Software"));
+      top.append(el("span", "icon", a.icon || "•"), info);
+      c.append(top, el("span", "tag", a.tagline || ""));
+      if (a.replaces) c.append(el("span", "alt", "Alternative to " + a.replaces));
+      c.onclick = () => open(a);
+      grid.append(c);
+    });
   }
-  function openApp(app){
+
+  function link(parent, label, value, primary) {
+    const href = url(value); if (!href) return;
+    const a = el("a", "btn" + (primary ? " primary" : ""), label); a.href = href; a.target = "_blank"; a.rel = "noopener noreferrer"; parent.append(a);
+  }
+  function soon(parent, label) { const s = el("span", "btn", label + " (coming soon)"); s.setAttribute("aria-disabled", "true"); parent.append(s); }
+
+  function open(a) {
     detail.replaceChildren();
-    const eyebrow=node("div","eyebrow",app.category||"APPLICATION");
-    const head=node("div","detail-head"),icon=node("div","detail-icon",app.icon||"◈"),heading=node("div","");
-    const h=node("h2","",app.name);h.id="detail-name";heading.append(h,node("p","",app.tagline||""));head.append(icon,heading);
-    const desc=node("p","detail-description",app.description||app.tagline||"");
-    const actions=node("div","detail-actions");addLink(actions,"Explore project ↗",app.web_url,true);addLink(actions,"Browse source on GitHub ↗",app.github_url);addLink(actions,"Download ↗",app.download_url);
-    detail.append(eyebrow,head,desc,actions);
-    if(Array.isArray(app.features)&&app.features.length){
-      const section=node("section","detail-section");section.append(node("h3","","What you can explore"));
-      const list=node("div","feature-list");app.features.forEach(item=>list.append(node("div","feature-item",item)));section.append(list);detail.append(section);
+    const head = el("div", "d-head"), t = el("div", ""), h = el("h2", "", a.name); h.id = "d-name";
+    t.append(h, el("p", "", a.tagline || ""));
+    const icon = el("span", "icon", a.icon || "•"); if (ok(a.accent)) icon.style.setProperty("--tint", a.accent);
+    head.append(icon, t);
+    detail.append(head, el("p", "d-desc", a.description || a.tagline || ""));
+    const acts = el("div", "actions");
+    link(acts, "Open web app", a.web_url, true); link(acts, "Download", a.download_url); link(acts, "View on GitHub", a.github_url);
+    soon(acts, "iOS"); soon(acts, "Android");
+    detail.append(acts);
+    if (Array.isArray(a.features) && a.features.length) {
+      detail.append(el("h3", "", "What it does"));
+      const ul = el("ul", "feats"); a.features.forEach(f => ul.append(el("li", "", f))); detail.append(ul);
     }
-    const install=node("section","detail-section");install.append(node("h3","","Installation"));
-    const box=node("div","install-box"),command=node("code","",available(app.install)?app.install:"Verified installation instructions will be published here.");
-    box.append(command);
-    if(available(app.install)){const copy=node("button","copy-btn","Copy");copy.type="button";copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(command.textContent);copy.textContent="Copied";}catch{copy.textContent="Copy unavailable";}});box.append(copy);}
-    install.append(box,node("p","source-note",app.install_note||"Check the upstream project documentation before deploying. Installation commands are shown only when verified."));
-    detail.append(install);
-    const meta=node("p","detail-meta","License: "+(app.license||"Not yet verified")+" · Project source: "+(safeUrl(app.github_url)?"Linked to GitHub":"Not published"));
-    detail.append(meta);
-    if(typeof dialog.showModal==="function")dialog.showModal();else dialog.setAttribute("open","");
+    detail.append(el("h3", "", "Install on your server"));
+    if (ok(a.install)) {
+      const box = el("div", "cmd"), code = el("code", "", a.install), copy = el("button", "btn", "Copy"); copy.type = "button";
+      copy.onclick = async () => { try { await navigator.clipboard.writeText(a.install); copy.textContent = "Copied"; } catch { copy.textContent = "Copy failed"; } };
+      box.append(code, copy); detail.append(box);
+    } else detail.append(el("p", "note", "Install steps are not published yet."));
+    if (a.install_note) detail.append(el("p", "note", a.install_note));
+    detail.append(el("p", "meta", "License: " + (ok(a.license) ? a.license : "not verified yet")));
+    dlg.showModal ? dlg.showModal() : dlg.setAttribute("open", "");
   }
-  $("dialog-close").addEventListener("click",()=>dialog.close());
-  dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close();});
-  search.addEventListener("input",()=>{query=search.value.trim().toLowerCase();renderApps();});
-  $("theme-toggle").addEventListener("click",()=>{const light=document.documentElement.classList.toggle("light");try{localStorage.setItem("arox-theme",light?"light":"dark");}catch{}});
-  try{if(localStorage.getItem("arox-theme")==="light")document.documentElement.classList.add("light");}catch{}
-  document.addEventListener("keydown",e=>{if(e.key==="/"&&!/INPUT|TEXTAREA/.test(document.activeElement.tagName)){e.preventDefault();search.focus();}if(e.key==="Escape"&&dialog.open)dialog.close();});
-  $("year").textContent=new Date().getFullYear();
-  fetch("apps.json").then(r=>{if(!r.ok)throw new Error("Catalogue unavailable");return r.json();}).then(data=>{if(!Array.isArray(data))throw new Error("Invalid catalogue");apps=data;renderFilters();renderApps();}).catch(()=>{$("app-count").textContent="CATALOGUE UNAVAILABLE";$("empty-state").hidden=false;$("empty-state").textContent="The app catalogue could not be loaded. Please try again later.";});
+
+  $("close").onclick = () => dlg.close();
+  dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  search.addEventListener("input", () => { q = search.value.trim().toLowerCase(); renderApps(); });
+  const root = document.documentElement;
+  try { const s = localStorage.getItem("arox-theme"); if (s ? s === "light" : matchMedia("(prefers-color-scheme: light)").matches) root.classList.add("light"); } catch {}
+  $("theme").onclick = () => { const l = root.classList.toggle("light"); try { localStorage.setItem("arox-theme", l ? "light" : "dark"); } catch {} };
+  $("year").textContent = new Date().getFullYear();
+  fetch("apps.json").then(r => { if (!r.ok) throw 0; return r.json(); })
+    .then(d => { if (!Array.isArray(d)) throw 0; apps = d; renderChips(); renderApps(); })
+    .catch(() => { $("count").textContent = ""; $("empty").hidden = false; $("empty").textContent = "The app list could not be loaded. Refresh the page to try again."; });
 })();
