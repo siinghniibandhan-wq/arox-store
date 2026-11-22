@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Finance Trading OS",
+    "tagline": "A unified workspace for market intelligence and trading workflows",
+    "description": "An independent finance and trading operating system project. Explore its capabilities and inspect the original repository before deploying; production access and distribution details are not yet published.",
+    "category": "Finance & Trading",
+    "replaces": "fragmented market research workflows",
+    "github_url": "https://github.com/siinghniibandhan-wq/ai-finance-trading-os",
+    "license": "Not yet verified",
+    "icon": "📈",
+    "accent": "#69d5e5",
+    "tags": [
+      "markets",
+      "trading",
+      "finance",
+      "analytics"
+    ],
+    "features": [
+      "Market intelligence workspace",
+      "Trading workflow exploration",
+      "AI-assisted research",
+      "Original project source on GitHub"
+    ],
+    "install_note": "Installation instructions are not yet verified. Use the upstream README and deployment documentation."
+  },
+  {
+    "name": "Arox AI",
+    "tagline": "An independent AI project from the Arox ecosystem",
+    "description": "Arox AI is listed as a separate project so it can be discovered independently from the marketplace. Review its repository for the current feature set, setup requirements and supported integrations.",
+    "category": "Artificial Intelligence",
+    "github_url": "https://github.com/siinghniibandhan-wq/Arox-Ai",
+    "license": "Not yet verified",
+    "icon": "✳",
+    "accent": "#b8a2ff",
+    "tags": [
+      "AI",
+      "automation",
+      "agents",
+      "integrations"
+    ],
+    "features": [
+      "Independent application listing",
+      "Original repository access",
+      "Project-specific setup and integrations"
+    ],
+    "install_note": "Installation instructions are not yet verified. Use the upstream README and project documentation."
+  }
+]
