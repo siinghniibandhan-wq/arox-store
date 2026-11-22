@@ -28,6 +28,44 @@ Health check: `/health`; interactive API docs: `/docs`.
 
 The Compose stack keeps PostgreSQL and Redis on a private Docker network, exposes only Caddy's 80/443 ports, obtains TLS automatically, and runs the API as a non-root user. Configure automated encrypted database backups and server monitoring before production traffic.
 
+## Vercel serverless deployment
+
+This backend includes a Vercel Python Function entry point at `api/index.py` and routing configuration in `vercel.json`. The existing Docker Compose deployment remains supported and unchanged.
+
+### Import settings
+
+1. Import this repository into Vercel.
+2. Set **Root Directory** to `backend` (not the repository root).
+3. Select the `feature/customer-auth-automated-reviews` branch to preview this unmerged backend work. Do not merge PR #3 as part of deployment setup.
+4. Keep the project name `arox-store` if available.
+5. Add the production environment variables below before the first deployment.
+
+### Required Vercel environment variables
+
+Set these in Vercel Project Settings → Environment Variables. Use provider-issued values; do not paste secrets into GitHub or the frontend.
+
+- `ENVIRONMENT=production`
+- `DATABASE_URL`: managed PostgreSQL connection string (use the provider's serverless/pooler URL when offered; do not use SQLite).
+- `REDIS_URL`: managed Redis URL, preferably TLS (`rediss://...`).
+- `JWT_SECRET_KEY`: long, random, unique secret.
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD`, `SMTP_FROM_EMAIL`: verified transactional email provider credentials.
+- `OPENAI_API_KEY`: server-side moderation API key.
+- `FRONTEND_ORIGIN=https://siinghniibandhan-wq.github.io`
+- `FRONTEND_URL=https://siinghniibandhan-wq.github.io/arox-store/`
+
+Do not deploy with placeholder credentials. Never expose database, Redis, SMTP, JWT, or OpenAI secrets in browser code.
+
+### Before production traffic
+
+- Provision PostgreSQL and Redis separately; Vercel does not provide either database as part of this project configuration.
+- Apply/verify the SQL schema against the managed PostgreSQL database and confirm the runtime database user has only the required permissions.
+- Verify outbound SMTP delivery and OpenAI moderation connectivity from the deployed function.
+- Test `/health`, registration, email verification, login, review submission, review listing, report submission, and admin moderation.
+- Configure database backups, retention, monitoring, and restore testing with the database provider.
+- Set the frontend `arox-api-base` meta tag to the deployed API origin only after the API passes the end-to-end checks.
+
+**Deployment caveat:** the current FastAPI startup calls SQLAlchemy `create_all` when the application module is imported. That is not a substitute for a controlled production migration process. Review the schema and database permissions before connecting a production database. This Vercel adapter does not provision infrastructure, create credentials, or make the API production-ready by itself.
+
 ## Customer journey
 
 - Register: `POST /api/auth/register`
