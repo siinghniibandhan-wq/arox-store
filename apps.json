@@ -24,30 +24,6 @@
     "install_note": "Installation instructions are not yet verified. Use the upstream README and deployment documentation."
   },
   {
-    "name": "Odoo",
-    "tagline": "A modular suite for business operations and enterprise workflows",
-    "description": "Odoo is an open-source suite of business applications covering areas such as CRM, sales, inventory, accounting and more. This listing links to the official upstream source; review its edition and licensing terms before use.",
-    "category": "Business & ERP",
-    "github_url": "https://github.com/odoo/odoo",
-    "license": "Check upstream licensing",
-    "icon": "🧩",
-    "accent": "#9b8cff",
-    "tags": [
-      "ERP",
-      "CRM",
-      "inventory",
-      "accounting",
-      "business"
-    ],
-    "features": [
-      "CRM and sales workflows",
-      "Inventory and operations",
-      "Accounting and invoicing",
-      "Extensible application modules"
-    ],
-    "install_note": "Follow the official Odoo installation documentation for the selected version and edition."
-  },
-  {
     "name": "Arox AI",
     "tagline": "An independent AI project from the Arox ecosystem",
     "description": "Arox AI is listed as a separate project so it can be discovered independently from the marketplace. Review its repository for the current feature set, setup requirements and supported integrations.",
