@@ -2,7 +2,7 @@
   {
     "name": "Finance Trading OS",
     "tagline": "A unified workspace for market intelligence and trading workflows",
-    "description": "An independent finance and trading operating system project. Explore its capabilities and inspect the original repository before deploying; production access and distribution details are not yet published.",
+    "description": "Financial OS is a personal finance, investments, market intelligence and Indian tax workspace. The public site currently opens the Financial OS product landing/demo page.",
     "category": "Finance & Trading",
     "replaces": "fragmented market research workflows",
     "github_url": "https://github.com/siinghniibandhan-wq/ai-finance-trading-os",
@@ -21,12 +21,30 @@
       "AI-assisted research",
       "Original project source on GitHub"
     ],
-    "install_note": "Installation instructions are not yet verified. Use the upstream README and deployment documentation."
+    "install_note": "Review the upstream README and backend/.env.example. Never commit real credentials, broker tokens, database passwords or gateway secrets.",
+    "web_url": "https://main.d1qcu4l3dz9f9e.amplifyapp.com",
+    "install_guide": [
+      {
+        "title": "Frontend development",
+        "command": "cd frontend\nnpm install\nnpm run dev",
+        "note": "Requires Node.js 20."
+      },
+      {
+        "title": "Backend development",
+        "command": "cd backend\npython3.12 -m venv .venv\nsource .venv/bin/activate\npython -m pip install -r requirements.txt -r requirements-dev.txt\ncp .env.example .env\nuvicorn app.main:app --reload",
+        "note": "Requires Python 3.12 and a PostgreSQL-compatible database. Configure local .env values before starting."
+      },
+      {
+        "title": "Production frontend",
+        "command": "AWS Amplify · main branch · app root: frontend/ · build: npm run build · output: dist",
+        "note": "The upstream README identifies Amplify as the frontend hosting target. Production deployment changes require the upstream release process."
+      }
+    ]
   },
   {
     "name": "Arox AI",
     "tagline": "An independent AI project from the Arox ecosystem",
-    "description": "Arox AI is listed as a separate project so it can be discovered independently from the marketplace. Review its repository for the current feature set, setup requirements and supported integrations.",
+    "description": "Arox AI is an AI-powered workforce orchestration platform with OmniRoute model routing, OpenCode coding workflows, n8n automation, PostgreSQL and Redis. The live URL currently displays its sign-in screen.",
     "category": "Artificial Intelligence",
     "github_url": "https://github.com/siinghniibandhan-wq/Arox-Ai",
     "license": "Not yet verified",
@@ -43,6 +61,24 @@
       "Original repository access",
       "Project-specific setup and integrations"
     ],
-    "install_note": "Installation instructions are not yet verified. Use the upstream README and project documentation."
+    "install_note": "The upstream README specifies /opt/arox and AWS SSM parameters under /arox/. Keep all API keys, database passwords and bot tokens out of the repository.",
+    "web_url": "https://aroxai.duckdns.org",
+    "install_guide": [
+      {
+        "title": "Prerequisites",
+        "command": "Docker and Docker Compose\nAWS CLI configured with access to the /arox/ SSM parameter path",
+        "note": "Use a controlled Linux server with resources appropriate for docker-compose.yml."
+      },
+      {
+        "title": "Deploy on the configured server",
+        "command": "sudo bash /opt/arox/start.sh",
+        "note": "The script reads encrypted parameters from AWS SSM in us-east-1, writes a temporary protected environment file and runs docker compose up -d --build."
+      },
+      {
+        "title": "Check services",
+        "command": "cd /opt/arox\ndocker compose ps\ndocker compose logs -f <service_name>",
+        "note": "Do not expose internal database, Redis, OmniRoute or OpenCode ports publicly. Configure DNS/TLS and required secrets before deployment."
+      }
+    ]
   }
 ]
